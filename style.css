@@ -1,0 +1,19 @@
+#numOfOrbsElement {
+    display: none;
+}
+
+#firstOrbMessage {
+    display: none;
+}
+
+#strangeOrbMessage {
+    display: none;
+}
+
+#investigateFirstOrb {
+    display: none;
+}
+
+#investigateOrbCooldownMessage {
+    display: none;
+}
