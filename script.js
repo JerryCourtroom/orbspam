@@ -12,6 +12,7 @@ var firstOrbMessage = document.getElementById("firstOrbMessage");
 var strangeOrbMessage = document.getElementById("strangeOrbMessage");
 var investigateFirstOrbButton = document.getElementById("investigateFirstOrbButton");
 var investigateOrbCooldownMessage = document.getElementById("investigateOrbCooldownMessage");
+var investigateOrbCooldownIntervalId = setInterval(investigateOrbCooldownControl, 1000);
 var numOfOrbs = 0;
 var orbsPerClick = 1;
 var firstOrbMilestone = 100;
@@ -66,13 +67,9 @@ function investigateFirstOrb() {
     numOfOrbs -= 99;
     numOfOrbsElement.innerHTML = "Orbs: " + numOfOrbs;
     investigateOrbCooldownStarted = true;
-    for (var i = 0; i < 10; i++) {
-        setTimeout(investigateOrbCooldownControl, 1000);
-    }
+    clearInterval(investigateOrbCooldownIntervalId);
     investigateOrbCooldownFinished = true;
-    if (investigateOrbCooldownFinished) {
-        investigateOrbCooldownMessage.innerHTML = "The investigation is finished. You found a vision orb!";
-    }
+    investigateOrbCooldownMessage.innerHTML = "The investigation is finished. You found a vision orb!";
 
 }
 
