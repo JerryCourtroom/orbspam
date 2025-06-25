@@ -21,3 +21,7 @@
 #pendingFirstOrbInvestigationMessage {
     display: none;
 }
+
+#alreadyInvestigatedOrbMessage {
+    display: none;
+}

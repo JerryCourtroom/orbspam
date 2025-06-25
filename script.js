@@ -12,6 +12,7 @@ var numOfOrbsElement = document.getElementById("numOfOrbsElement");
 var firstOrbMessage = document.getElementById("firstOrbMessage");
 var strangeOrbMessage = document.getElementById("strangeOrbMessage");
 var investigateFirstOrbButton = document.getElementById("investigateFirstOrbButton");
+var alreadyInvestigatedOrbMessage = document.getElementById("alreadyInvestigatedOrbMessage");
 var investigateOrbCooldownMessage = document.getElementById("investigateOrbCooldownMessage");
 var ongoingFirstOrbInvestigationMessage = document.getElementById("ongoingFirstOrbInvestigationMessage");
 var investigateOrbCooldownIntervalId;
@@ -19,13 +20,14 @@ var numOfOrbs = 0;
 var orbsPerClick = 1;
 var firstOrbMilestone = 100;
 var investigateOrbCooldown = 10;
+var investigatedFirstOrb = false;
 var reachedFirstOrbMilestone = false;
 var obtainedFirstOrb = false;
 var investigateOrbCooldownStarted = false;
 var investigateOrbCooldownFinished = false;
 
 //displays first orb congratulation message to user only once
-//user obtains strange orb on the 100th orb collected
+//user obtains strange orb after collecting 100 orbs
 function getOrb() {
 
     numOfOrbs += 1;
@@ -66,14 +68,28 @@ function foundStrangeOrb() {
 //after investigation, user finds vision orb
 function investigateFirstOrb() {
 
-    numOfOrbs -= 99;
-    numOfOrbsElement.innerHTML = "Orbs: " + numOfOrbs;
-    investigateOrbCooldownStarted = true;
-    showInvestigateOrbCooldownMessage();
-    investigateOrbCooldownIntervalId = setInterval(investigateOrbCooldownControl, 1000);
+    if (!investigatedFirstOrb) {
+        numOfOrbs -= 99;
+        numOfOrbsElement.innerHTML = "Orbs: " + numOfOrbs;
+        investigateOrbCooldownStarted = true;
+        showInvestigateOrbCooldownMessage();
+        investigateOrbCooldownIntervalId = setInterval(investigateOrbCooldownControl, 1000);
+        investigatedFirstOrb = true;
+    } else {
+        alreadyInvestigatedOrbMessage.innerHTML = "You've already investigated this orb.";
+        alreadyInvestigatedOrbMessage.style.display = "block";
+        setTimeout(hideAlreadyInvestigatedOrbMessage, 1000);
+    }
+}
+
+//if the user has already investigated an orb, block them from investigating again
+function hideAlreadyInvestigatedOrbMessage() {
+
+    alreadyInvestigatedOrbMessage.style.display = "none";
 
 }
 
+//shows first orb investigation messages
 function showInvestigateOrbCooldownMessage() {
 
     investigateOrbCooldownMessage.innerHTML = "The investigation costed 99 orbs. Time until finished: " + investigateOrbCooldown;
@@ -83,6 +99,7 @@ function showInvestigateOrbCooldownMessage() {
 
 }
 
+//first orb investigation setInterval() from pressing investigate orb button decreases cooldown number every second while checking if the cooldown ends
 function checkOrbInvestigationTime() {
 
     if (investigateOrbCooldown >= 0) {
@@ -116,6 +133,7 @@ function saveGame() {
     localStorage.setItem("investigateOrbCooldownIntervalId", investigateOrbCooldownIntervalId);
     localStorage.setItem("reachedFirstOrbMilestone", reachedFirstOrbMilestone);
     localStorage.setItem("obtainedFirstOrb", obtainedFirstOrb);
+    localStorage.setItem("investigatedFirstOrb", investigatedFirstOrb);
     localStorage.setItem("investigateOrbCooldownStarted", investigateOrbCooldownStarted);
     localStorage.setItem("investigateOrbCooldownFinished", investigateOrbCooldownFinished);
 
@@ -131,6 +149,7 @@ function loadGame() {
     investigateOrbCooldownIntervalId = Number(localStorage.getItem("investigateOrbCooldownIntervalId"));
     reachedFirstOrbMilestone = (localStorage.getItem("reachedFirstOrbMilestone") === "true");
     obtainedFirstOrb = (localStorage.getItem("obtainedFirstOrb") === "true");
+    investigatedFirstOrb = (localStorage.getItem("investigatedFirstOrb") === "true");
     investigateOrbCooldownStarted = (localStorage.getItem("investigateOrbCooldownStarted") === "true");
     investigateOrbCooldownFinished = (localStorage.getItem("investigateOrbCooldownFinished") === "true");
     if (obtainedFirstOrb) {
